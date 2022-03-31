@@ -1,0 +1,63 @@
+{
+  "project_info": {
+    "project_number": "289286609350",
+    "project_id": "origin-32a8a",
+    "storage_bucket": "origin-32a8a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:289286609350:android:d92385231d84392e25fac7",
+        "android_client_info": {
+          "package_name": "com.origin.esports"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "289286609350-ahih0qpqldaanm9fa5riffj10s59dko0.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.origin.esports",
+            "certificate_hash": "431f9f4e10ab4dd033745504d761332670985748"
+          }
+        },
+        {
+          "client_id": "289286609350-g4lnnn6sbetf72p1pumboc46rojvd1s9.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.origin.esports",
+            "certificate_hash": "0e753a2f625e3517a7ba84ee48c000de2ed3df5d"
+          }
+        },
+        {
+          "client_id": "289286609350-spqkmqmdcon97h4jasdlmo168u56ds10.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.origin.esports",
+            "certificate_hash": "b57a90818a25c4f4844ff13375ae5fa8f5c0a280"
+          }
+        },
+        {
+          "client_id": "289286609350-25o3m2vcvt7mapmg4gctv3r5s7uupk6i.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBpuWVOrglf_k1Y1AghIKb86HSEMaLldCo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "289286609350-25o3m2vcvt7mapmg4gctv3r5s7uupk6i.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

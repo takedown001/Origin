@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+        <LinearLayout
+            android:id="@+id/container_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+                <include
+                    android:id="@+id/toolbar"
+                    layout="@layout/toolbar"
+                    android:layout_height="match_parent"
+                    android:layout_width="match_parent" />
+
+                <androidx.cardview.widget.CardView
+                    android:id="@id/mainCard"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="10.0dip"
+                    android:layout_marginTop="8.0dip"
+                    android:layout_marginRight="10.0dip"
+                    android:layout_marginBottom="2.0dip"
+                    android:clickable="true"
+                    android:foreground="?android:selectableItemBackground"
+                    app:cardCornerRadius="5.0dip"
+                    app:cardPreventCornerOverlap="true">
+
+                        <LinearLayout
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+
+                                <RelativeLayout
+                                    android:id="@id/sponsorTextArea"
+                                    android:layout_width="fill_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="5.0dip"
+                                    android:layout_marginRight="5.0dip"
+                                    android:visibility="gone">
+
+                                        <TextView
+                                            android:id="@id/sponsorText"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:layout_centerVertical="true"
+                                            android:layout_toLeftOf="@id/info"
+                                            android:fontFamily="@font/lato"
+                                            android:text="Sponsored by TrickyTime"
+                                            android:textSize="10.0sp" />
+
+                                        <ImageView
+                                            android:id="@id/info"
+                                            android:layout_width="12.0dip"
+                                            android:layout_height="12.0dip"
+                                            android:layout_alignParentEnd="true"
+                                            android:layout_alignParentRight="true"
+                                            android:layout_centerVertical="true"
+                                            android:layout_marginLeft="2.0dip"
+                                            android:contentDescription="TODO"
+                                            app:srcCompat="@drawable/ic_info_black_24dp" />
+                                </RelativeLayout>
+
+                                <FrameLayout
+                                    android:id="@+id/frame_container"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+
+                        </LinearLayout>
+                </androidx.cardview.widget.CardView>
+        </LinearLayout>
+
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+            android:id="@+id/navigation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_gravity="bottom"
+            android:background="@android:color/white"
+            android:visibility="visible"
+            app:elevation="13dp"
+
+            app:itemIconTint="@color/bottom_nav_color"
+            app:itemTextColor="@color/bottom_nav_color"
+            app:menu="@menu/navigation"
+            app:theme="@style/NavigationDrawerStyle" />
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

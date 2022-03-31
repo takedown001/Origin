@@ -1,0 +1,117 @@
+buildscript {
+    repositories {
+        maven { url 'https://plugins.gradle.org/m2/'}
+    }
+    dependencies {
+        classpath 'gradle.plugin.com.onesignal:onesignal-gradle-plugin:0.12.9'
+    }
+}
+apply plugin: 'com.onesignal.androidsdk.onesignal-gradle-plugin'
+apply plugin: 'com.android.application'
+apply plugin: 'com.chrisney.enigma'
+enigma.enabled = true
+enigma.injectFakeKeys = true
+enigma.classes = ["com.origin.esports.Originconfig.URL"]
+repositories {
+    maven { url 'https://maven.google.com' }
+}
+
+
+android {
+    signingConfigs {
+        sign {
+            storeFile file('F:\\important\\origin.jks')
+            storePassword 'Origin@123'
+            keyAlias 'origin'
+            keyPassword 'Origin@123'
+        }
+        debug {
+            storeFile file('F:\\important\\origin.jks')
+            storePassword 'Origin@123'
+            keyAlias 'origin'
+            keyPassword 'Origin@123'
+        }
+    }
+    compileSdkVersion 30
+    buildToolsVersion "30.0.2"
+
+    defaultConfig {
+        applicationId "com.origin.esports"
+        minSdkVersion 22
+        targetSdkVersion 30
+        multiDexEnabled true
+        versionCode 1
+        versionName "1.0"
+        manifestPlaceholders = [
+                onesignal_app_id: '5aaf80de-6ac2-4fe6-a63a-220823767cb8',
+                // Project number pulled from dashboard, local value is ignored.
+                onesignal_google_project_number: '289286609350'
+        ]
+        lintOptions {
+            checkReleaseBuilds true
+        }
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+    repositories {
+        google()
+        mavenCentral()
+        maven { url 'https://plugins.gradle.org/m2/'}
+        maven { url "https://www.jitpack.io" }
+        maven { url "https://maven.google.com" }
+        maven { url 'https://dl.bintray.com/drummer-aidan/maven' }
+        maven { url "https://s3-ap-southeast-1.amazonaws.com/godel-release/godel/" }
+        maven {
+            url  "https://dl.bintray.com/sasidhar-678/maven" }
+        jcenter()
+    }
+    buildTypes {
+        release {
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            multiDexEnabled true
+            shrinkResources true
+        }
+
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+}
+
+dependencies {
+
+    implementation 'com.onesignal:OneSignal:3.15.4'
+    implementation 'com.google.android.gms:play-services-ads:19.4.0'
+    implementation 'androidx.appcompat:appcompat:1.2.0'
+    implementation 'com.google.android.material:material:1.2.1'
+    implementation 'com.google.firebase:firebase-messaging:21.0.0'
+    testImplementation 'junit:junit:4.+'
+    implementation 'androidx.multidex:multidex:2.0.1'
+    implementation 'com.google.firebase:firebase-analytics'
+    implementation 'androidx.appcompat:appcompat:1.2.0'
+    implementation 'com.payumoney.core:payumoney-sdk:7.6.0'
+    implementation  'com.payumoney.sdkui:plug-n-play:1.6.0'
+    implementation 'com.google.android.material:material:1.2.1'
+    implementation 'com.google.firebase:firebase-core:18.0.0'
+    implementation 'com.squareup.retrofit2:retrofit:2.5.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.5.0'
+    implementation 'com.squareup.okhttp3:logging-interceptor:3.4.1'
+    implementation 'com.squareup.okhttp3:okhttp:3.4.1'
+    implementation 'com.scottyab:rootbeer-lib:0.0.8'
+    implementation 'com.google.firebase:firebase-auth:20.0.1'
+    implementation 'androidx.browser:browser:1.2.0'
+    implementation 'com.hbb20:ccp:2.4.0'
+    implementation 'me.zhanghai.android.materialprogressbar:library:1.6.1'
+    implementation 'de.hdodenhof:circleimageview:3.1.0'
+    implementation 'com.github.bumptech.glide:glide:3.7.0'
+    implementation 'com.facebook.shimmer:shimmer:0.5.0'
+    implementation 'com.google.firebase:firebase-core:18.0.0'
+    implementation 'com.github.joielechong:countrycodepicker:2.4.2'
+    implementation 'com.google.firebase:firebase-analytics:18.0.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
+    implementation 'me.zhanghai.android.materialprogressbar:library:1.6.1'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.2'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
+}
+apply plugin: 'com.google.gms.google-services'

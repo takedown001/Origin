@@ -1,0 +1,23 @@
+<resources>
+    <string name="app_name">Origin</string>
+
+    <string name="regSuccessMessage">Registered Successfully! Login Now.</string>
+    <string name="title_activity_home">HomeActivity</string>
+    <string name="sufficientBalanceText">You have sufficient Play Coins</string>
+    <string name="insufficientBalanceText">You have insufficient balance</string>
+    <string name="upcomingIDPassText">Room ID and Password will be shown here (check before 15min of match schedule time)</string>
+    <string name="shareSub">share</string>
+    <string name="winnerchickendinner">Chicken Dinner Winner</string>
+    <string name="forceUpdateNote">Update application to New Latest Version</string>
+    <string name="notification_activity">NotificationView</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="pubg_mobile_match_1">PUBG Mobile Match #1</string>
+    <string name="todo">TODO</string>
+    <string name="sign_up">Sign Up</string>
+    <string name="welcome_to_origin_tournament">Welcome to Origin Tournament</string>
+    <string name="in_associated_with">In Associated With</string>
+    <string name="gcc_org_com">Gcc-Org.com</string>
+    <string name="bussiness_enquires">Bussiness Enquires</string>
+    <string name="your_detail_of_notification">your detail of notification...</string>
+</resources>

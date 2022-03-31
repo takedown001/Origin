@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tool="http://schemas.android.com/tools"
+    android:id="@+id/toolbar"
+    android:layout_width="match_parent"
+    android:layout_height="?attr/actionBarSize"
+    android:background="@color/white"
+    android:theme="@style/Theme.Toolbar.Custom"
+    app:contentInsetStartWithNavigation="0.0dip"
+    app:layout_scrollFlags="scroll|enterAlways"
+    app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+    app:subtitleTextColor="@color/mainblue"
+    app:titleTextColor="@color/mainblue">
+
+
+
+    <ImageView
+        android:id="@+id/title_logo"
+        android:layout_width="38dp"
+        android:layout_height="38dp"
+        android:layout_gravity="left"
+        android:padding="5.0dip"
+        app:srcCompat="@drawable/iconsmall"
+        android:contentDescription="TODO" />
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="left"
+        android:layout_marginLeft="@dimen/dimen_30dp"
+        android:fontFamily="@font/galaxy"
+        android:text="@string/app_name"
+        android:textColor="@color/colorPrimary"
+        android:textSize="18.0dip" />
+
+    <androidx.appcompat.widget.AppCompatImageButton
+        android:layout_width="@dimen/dimen_30dp"
+        android:layout_height="@dimen/dimen_30dp"
+        android:layout_marginLeft="130dp"
+        android:src="@drawable/bell"
+        android:id="@+id/notify"
+        android:background="@color/transparent"
+        android:clickable="true"
+        />
+    <androidx.cardview.widget.CardView
+
+        android:layout_width="@dimen/dimen_80dp"
+        android:layout_height="@dimen/dimen_35dp"
+        android:layout_marginLeft="@dimen/dimen_30dp">
+        <androidx.appcompat.widget.AppCompatImageButton
+        android:layout_width="@dimen/dimen_30dp"
+        android:layout_height="@dimen/dimen_30dp"
+        android:layout_marginTop="2dp"
+        android:src="@drawable/playcoin22x22"
+        android:id="@+id/walletshotcut"
+        android:background="@color/transparent"
+        android:clickable="true"/>
+
+        <TextView
+            android:id="@+id/playcoin"
+            android:layout_marginTop="@dimen/dimen_2dp"
+            android:layout_width="@dimen/dimen_50dp"
+            android:layout_marginLeft="@dimen/dimen_30dp"
+            android:layout_height="@dimen/dimen_30dp"
+            android:fontFamily="@font/montserrat_bold"
+            android:gravity="center"
+            android:text="0" />
+    </androidx.cardview.widget.CardView>
+
+
+
+
+</androidx.appcompat.widget.Toolbar>
