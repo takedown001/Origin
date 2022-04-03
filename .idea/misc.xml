@@ -3,10 +3,16 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/wwwsh/AndroidStudioProjects/Origin/app/src/main/res/layout/activity_edit_profile.xml" value="0.16485507246376813" />
+        <entry key="..\:/Users/wwwsh/AndroidStudioProjects/Origin/app/src/main/res/layout/activity_home.xml" value="0.16485507246376813" />
+        <entry key="..\:/Users/wwwsh/AndroidStudioProjects/Origin/app/src/main/res/layout/activity_join_match_confirmation.xml" value="0.16485507246376813" />
         <entry key="..\:/Users/wwwsh/AndroidStudioProjects/Origin/app/src/main/res/layout/activity_login.xml" value="0.22" />
         <entry key="..\:/Users/wwwsh/AndroidStudioProjects/Origin/app/src/main/res/layout/activity_match_details.xml" value="0.13989637305699482" />
         <entry key="..\:/Users/wwwsh/AndroidStudioProjects/Origin/app/src/main/res/layout/activity_top_players.xml" value="0.11392405063291139" />
+        <entry key="..\:/Users/wwwsh/AndroidStudioProjects/Origin/app/src/main/res/layout/newsrowitem.xml" value="0.16485507246376813" />
+        <entry key="..\:/Users/wwwsh/AndroidStudioProjects/Origin/app/src/main/res/layout/ongoing_list_row.xml" value="0.33" />
         <entry key="..\:/Users/wwwsh/AndroidStudioProjects/Origin/app/src/main/res/layout/top_player_list_row.xml" value="0.17889492753623187" />
+        <entry key="..\:/Users/wwwsh/AndroidStudioProjects/Origin/app/src/main/res/layout/txn_shimmer_item.xml" value="0.16485507246376813" />
       </map>
     </option>
   </component>

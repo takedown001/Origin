@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -67,7 +68,7 @@ public class GameFragment extends Fragment {
     private LinearLayout noMatchesLL;
     private static final String TAG_ISBAN = "isban";
     private static final String TAG_GAME = "games";
-    private String ban;
+    private boolean ban;
     private JSONArray jsonarray = null;
     private JSONArray jsonarrayuser = null;
     private int success;
@@ -179,10 +180,9 @@ public class GameFragment extends Fragment {
             String rq = null;
             try {
                 params.put(TAG_USERID,shred.getInt(TAG_USERID, 0));
-                params.put(TAG_USERNAME, shred.getString(TAG_USERNAME, ""));
-                params.put("rootcheck", root);
-                params.put(TAG_TOKEN, shred.getString(TAG_TOKEN, ""));
-                // getting JSON string from URL
+                params.put("rootcheck",  root);
+                params.put(TAG_TOKEN, shred.getString(TAG_TOKEN, null));
+                params.put("deviceid",Helper.getDeviceId(getActivity()));
                 rq  = jsonParser.makeHttpRequest(url, params);
 
             } catch (JSONException e) {
@@ -272,7 +272,7 @@ public class GameFragment extends Fragment {
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
-                    if (success == 1) {
+                    if (success == 1 ) {
                         // jsonarray found
                         // Getting Array of jsonarray
                         //  Updating parsed JSON data into ListView
@@ -285,11 +285,11 @@ public class GameFragment extends Fragment {
                             editor.putString(GAMEUSERNAME, offersListUser.get(i).get(GAMEUSERNAME));
 
 
-                            editor.putString(TAG_ISBAN, offersListUser.get(i).get(TAG_ISBAN));
+                            editor.putBoolean(TAG_ISBAN, Boolean.parseBoolean(offersListUser.get(i).get(TAG_ISBAN)));
                             //balance
                             editor.putInt(TAG_USERBALANCE, Integer.parseInt(offersListUser.get(i).get(TAG_USERBALANCE)));
                             editor.putInt(TAG_WINMONEY, Integer.parseInt(offersListUser.get(i).get(TAG_WINMONEY)));
-                            editor.putString("isroot", String.valueOf(root));
+                            editor.putBoolean("isroot", root);
 
                             //matchdetail
                             editor.putInt(TAG_TOTALMATCHPLAYED, Integer.parseInt(offersListUser.get(i).get(TAG_TOTALMATCHPLAYED)));
@@ -298,7 +298,8 @@ public class GameFragment extends Fragment {
                             editor.putInt(TAG_KILLS, Integer.parseInt(offersListUser.get(i).get(TAG_KILLS)));
                             editor.apply();
                         }
-                        ban = shred.getString(TAG_ISBAN, "NO");
+                        ban = shred.getBoolean(TAG_ISBAN,false);
+                        //      Log.d("isban", ban);
 
 //                        if (root) {
 //                            getActivity().finish();
@@ -306,7 +307,8 @@ public class GameFragment extends Fragment {
 //                            startActivity(new Intent(getActivity(), LoginActivity.class));
                         //  }
 //                    else {
-                        if (ban.equals("YES")) {
+                        if (ban) {
+
                             shred.edit().clear().apply();
                             getActivity().finish();
                             Toast.makeText(getActivity(), "You Have Been Banned", Toast.LENGTH_SHORT).show();
@@ -330,7 +332,7 @@ public class GameFragment extends Fragment {
                             noMatchesLL.setVisibility(View.GONE);
                         }
                     }
-                    else {
+                    else if (success ==2){
                         Toast.makeText(context,msg,Toast.LENGTH_LONG).show();
                     }
                 }

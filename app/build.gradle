@@ -9,7 +9,7 @@ buildscript {
 apply plugin: 'com.onesignal.androidsdk.onesignal-gradle-plugin'
 apply plugin: 'com.android.application'
 apply plugin: 'com.chrisney.enigma'
-enigma.enabled = true
+enigma.enabled = false
 enigma.injectFakeKeys = true
 enigma.classes = ["com.origin.esports.Originconfig.URL"]
 repositories {

@@ -1,8 +1,10 @@
 package com.origin.esports;
 
+import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -15,6 +17,7 @@ import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 
 import com.origin.esports.Originconfig.URL;
 
@@ -56,6 +59,7 @@ public class LoginActivity extends AppCompatActivity {
     private static final String TAG_ISFIRSTSTART ="firstStart";
     JSONParserString jsonParserString = new JSONParserString();
     private TextView resetpass;
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -92,8 +96,27 @@ public class LoginActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-
+isStoragePermissionGranted();
     }
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    public  boolean isStoragePermissionGranted() {
+        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.Q) {
+            if (checkSelfPermission(android.Manifest.permission.READ_PHONE_STATE) == PackageManager.PERMISSION_GRANTED) {
+                return true;
+            } else {
+                ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.READ_PHONE_STATE}, 1);
+                return false;
+            }
+        }
+        if (checkSelfPermission(android.Manifest.permission.READ_PHONE_STATE)
+                == PackageManager.PERMISSION_GRANTED ){
+            return true;
+        } else {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_PHONE_STATE}, 1);
+            return false;
+        }
+    }
+
 
     private void userLogin() {
         //first getting the values
@@ -144,12 +167,12 @@ public class LoginActivity extends AppCompatActivity {
                 try {
                     params.put(TAG_USERNAME, username);
                     params.put(TAG_PASSWORD, password);
+                    params.put("deviceid",Helper.getDeviceId(LoginActivity.this));
                     rq = jsonParserString.makeHttpRequest(URL.LOGIN, params);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
                 //returing the response
-                Log.d("test",rq);
                 return rq;
             }
 
@@ -172,7 +195,7 @@ public class LoginActivity extends AppCompatActivity {
                                 Toast.makeText(LoginActivity.this, "Something Went Wrong", Toast.LENGTH_LONG).show();
                                 return;
                             } else {
-                                 Log.d("test",s);
+                           //      Log.d("test",s);
                                 JSONObject obj = new JSONObject(decData);
                                 //checking for error to authenticate
                                 if (!obj.getBoolean(TAG_ERROR)) {

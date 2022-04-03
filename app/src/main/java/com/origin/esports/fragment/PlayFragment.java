@@ -97,7 +97,7 @@ public class PlayFragment extends Fragment {
     private static final String TAG_TOTALMATCHPLAYED = "totalmatchplayed";
     private static final String TAG_WONAMOUNT = "wonamount";
     private static final String TAG_KILLS = "kills";
-    private String ban;
+    private boolean ban;
     // products JSONArray
     private JSONArray jsonarray = null;
     private JSONArray jsonarrayuser = null;
@@ -116,7 +116,6 @@ public class PlayFragment extends Fragment {
     private String game;
     private ShimmerFrameLayout mShimmerViewContainer;
     private LinearLayout noMatchesLL;
-    private  boolean root;
     private static final String TAG_GAME = "games";
     public PlayFragment() {
         // Required empty public constructor
@@ -352,11 +351,10 @@ public class PlayFragment extends Fragment {
 
 
 
-                            editor.putString(TAG_ISBAN,offersListUser.get(i).get(TAG_ISBAN));
+                            editor.putBoolean(TAG_ISBAN, Boolean.parseBoolean(offersListUser.get(i).get(TAG_ISBAN)));
                             //balance
                             editor.putInt(TAG_USERBALANCE, Integer.parseInt(offersListUser.get(i).get(TAG_USERBALANCE)));
                             editor.putInt(TAG_WINMONEY, Integer.parseInt(offersListUser.get(i).get(TAG_WINMONEY)));
-                            editor.putString("isroot", String.valueOf(root));
 
                             //matchdetail
                             editor.putInt(TAG_TOTALMATCHPLAYED, Integer.parseInt(offersListUser.get(i).get(TAG_TOTALMATCHPLAYED)));
@@ -365,7 +363,7 @@ public class PlayFragment extends Fragment {
                             editor.apply();
                         }
 
-                        ban = shred.getString(TAG_ISBAN,"NO");
+                        ban = shred.getBoolean(TAG_ISBAN,false);
                   //      Log.d("isban", ban);
 
 //                        if (root) {
@@ -374,7 +372,7 @@ public class PlayFragment extends Fragment {
 //                            startActivity(new Intent(getActivity(), LoginActivity.class));
                       //  }
 //                    else {
-                            if (ban.equals("YES")) {
+                            if (ban) {
                                 shred.edit().clear().apply();
                                 getActivity().finish();
                                 Toast.makeText(getActivity(), "You Have Been Banned", Toast.LENGTH_SHORT).show();

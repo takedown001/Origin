@@ -216,6 +216,7 @@ public class HomeActivity extends AppCompatActivity {
                 params.put(TAG_TOKEN,(shred.getString(TAG_TOKEN,null)));
                 params.put("sign",Helper.AppSignature(HomeActivity.this));
                 params.put(TAG_USERID,shred.getInt(TAG_USERID,0));
+
                 rq = jsonparser.makeHttpRequest(url,params);
             } catch (Exception e) {
                 e.printStackTrace();

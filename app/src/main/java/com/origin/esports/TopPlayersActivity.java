@@ -50,8 +50,6 @@ public class TopPlayersActivity extends AppCompatActivity {
     JSONObject obj = new JSONObject();
     //user
     private static final String TAG_USERID = URL.USERID;
-    private static final String TAG_FIRSTNAME = URL.FIRSTNAME;
-    private static final String TAG_LASTNAME = URL.LASTNAME;
     private static final String TAG_USERNAME = URL.USERNAME;
 
     //playerjoinstatus
@@ -189,7 +187,6 @@ public class TopPlayersActivity extends AppCompatActivity {
 
                     try {
                         JSONObject ack = new JSONObject(s);
-
                         String decData = Helper.profileDecrypt(ack.get("Data").toString(), ack.get("Hash").toString());
                         if (!Helper.verify(decData, ack.get("Sign").toString(), JSONParserString.publickey)) {
                             Toast.makeText(TopPlayersActivity.this, "Something Went Wrong", Toast.LENGTH_LONG).show();
@@ -197,7 +194,7 @@ public class TopPlayersActivity extends AppCompatActivity {
                         } else {
 
                             obj = new JSONObject(decData);
-                 //           Log.d("test", String.valueOf(obj));
+                           Log.d("test",s);
                             if (!obj.getBoolean(TAG_ERROR)) {
 
                                 // adding each child node to HashMap key => value
