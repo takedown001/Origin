@@ -19,7 +19,12 @@
         <item name="actionMenuTextColor">@color/mainblue</item>
         <item name="colorControlNormal">@color/mainblue</item>
     </style>
-
+    <style name="Theme.AppCompat.Light.NoActionBar.FullScreen" parent="@style/Theme.AppCompat.Light.NoActionBar">
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowActionBar">false</item>
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+    </style>
     <style name="NavigationDrawerStyle">
         <item name="android:textSize">11sp</item><!-- text size in menu-->
 

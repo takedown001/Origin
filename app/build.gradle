@@ -40,7 +40,7 @@ android {
         minSdkVersion 22
         targetSdkVersion 30
         multiDexEnabled true
-        versionCode 1
+        versionCode 4
         versionName "1.0"
         manifestPlaceholders = [
                 onesignal_app_id: '5aaf80de-6ac2-4fe6-a63a-220823767cb8',
@@ -77,9 +77,12 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+
 }
 
 dependencies {
+
+    compile project(":sdkui");
 
     implementation 'com.onesignal:OneSignal:3.15.4'
     implementation 'com.google.android.gms:play-services-ads:19.4.0'
@@ -90,8 +93,6 @@ dependencies {
     implementation 'androidx.multidex:multidex:2.0.1'
     implementation 'com.google.firebase:firebase-analytics'
     implementation 'androidx.appcompat:appcompat:1.2.0'
-    implementation 'com.payumoney.core:payumoney-sdk:7.6.0'
-    implementation  'com.payumoney.sdkui:plug-n-play:1.6.0'
     implementation 'com.google.android.material:material:1.2.1'
     implementation 'com.google.firebase:firebase-core:18.0.0'
     implementation 'com.squareup.retrofit2:retrofit:2.5.0'

@@ -139,6 +139,9 @@ public class ProfileFragment extends Fragment {
                 getContext().startActivity(myIntent);
             }
         });
+        if(shred.getBoolean("wallet",false)){
+            myWallet.setVisibility(View.VISIBLE);
+        }
         myWallet.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

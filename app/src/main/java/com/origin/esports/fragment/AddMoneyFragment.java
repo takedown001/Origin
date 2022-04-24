@@ -24,9 +24,8 @@ import static android.content.Context.MODE_PRIVATE;
 public class AddMoneyFragment extends Fragment {
 
     //user
-    private static final String TAG_FIRSTNAME = URL.FIRSTNAME;
     private static final String TAG_USERNAME = URL.USERNAME;
-    private static final String TAG_EMAIL = URL.EMAIL;
+
     private static final String TAG_MOBILE = URL.MOBILE;
 
     private Button addmoney;
@@ -84,8 +83,6 @@ public class AddMoneyFragment extends Fragment {
         instamojo = (RadioButton) rootViewone.findViewById(R.id.radio02);
 
         username = shred.getString(TAG_USERNAME,"");
-        email = shred.getString(TAG_EMAIL,"");
-        name = shred.getString(TAG_FIRSTNAME,"");
         number = shred.getString(TAG_MOBILE,"");
 //        paymentGateway = prf.getString("paymentGateway", "paytm");
 
@@ -105,7 +102,7 @@ public class AddMoneyFragment extends Fragment {
 //                        }
 
                         if (paytm.isChecked()) {
-                            ((MyWalletActivity)(getActivity())).PaytmAddMoney(obj,email,number,name);
+                            ((MyWalletActivity)(getActivity())).PaytmAddMoney(obj,username,number);
 
 //                        } else if (paypal.isChecked()){
 //                            ((MyWalletActivity) getActivity()).onBraintreeSubmit(email, number, obj, "Add Money to Wallet", name);

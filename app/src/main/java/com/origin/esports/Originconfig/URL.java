@@ -35,9 +35,9 @@ public class URL {
     public static final String BALANCE = "balance";
     public static final String WINMONEY ="winmoney";
 
-    // Paumoney Salt
-    public static final String MerchantId = "7396527";
-    public static final String MerchantKey = "xVadIpa2";
+   public static final String MerchantKey = "xVadIpa2";
+   public static final String Hash = mainurl+"new_hash.php";
+
 
 
     public static final String amount = "addamount";

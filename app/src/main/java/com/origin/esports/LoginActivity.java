@@ -96,7 +96,7 @@ public class LoginActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-isStoragePermissionGranted();
+//isStoragePermissionGranted();
     }
     @RequiresApi(api = Build.VERSION_CODES.M)
     public  boolean isStoragePermissionGranted() {
@@ -104,7 +104,7 @@ isStoragePermissionGranted();
             if (checkSelfPermission(android.Manifest.permission.READ_PHONE_STATE) == PackageManager.PERMISSION_GRANTED) {
                 return true;
             } else {
-                ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.READ_PHONE_STATE}, 1);
+                ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.READ_PHONE_STATE,Manifest.permission.BLUETOOTH}, 1);
                 return false;
             }
         }
@@ -112,7 +112,7 @@ isStoragePermissionGranted();
                 == PackageManager.PERMISSION_GRANTED ){
             return true;
         } else {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_PHONE_STATE}, 1);
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_PHONE_STATE,Manifest.permission.BLUETOOTH}, 1);
             return false;
         }
     }
@@ -167,7 +167,7 @@ isStoragePermissionGranted();
                 try {
                     params.put(TAG_USERNAME, username);
                     params.put(TAG_PASSWORD, password);
-                    params.put("deviceid",Helper.getDeviceId(LoginActivity.this));
+                    params.put("deviceid",Helper.getUniqueId(LoginActivity.this));
                     rq = jsonParserString.makeHttpRequest(URL.LOGIN, params);
                 } catch (Exception e) {
                     e.printStackTrace();

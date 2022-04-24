@@ -1,3 +1,2 @@
-
 rootProject.name = "Origin"
-include ':app'
+include ':app', 'sdkui'

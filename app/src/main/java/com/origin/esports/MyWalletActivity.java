@@ -1,18 +1,26 @@
 package com.origin.esports;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
+import android.webkit.WebView;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -26,12 +34,25 @@ import com.origin.esports.fragment.TransactionsFragment;
 import com.origin.esports.fragment.WithdrawFragment;
 
 import com.google.android.material.tabs.TabLayout;
-import com.payumoney.core.PayUmoneySdkInitializer;
-import com.payumoney.core.entity.TransactionResponse;
-import com.payumoney.sdkui.ui.utils.PayUmoneyFlowManager;
+import com.payu.india.Extras.PayUChecksum;
+import com.payu.india.Model.PaymentParams;
+import com.payu.india.Model.PayuConfig;
+import com.payu.india.Model.PayuHashes;
+import com.payu.india.Model.PayuResponse;
+import com.payu.india.Model.PostData;
+import com.payu.india.Model.TransactionDetails;
+import com.payu.india.Model.TransactionResponse;
+import com.payu.india.Payu.Payu;
+import com.payu.india.Payu.PayuConstants;
+import com.payu.india.Payu.PayuErrors;
+import com.payu.payuui.Activity.PayUBaseActivity;
+import com.payu.payuui.SdkuiUtil.SdkUIConstants;
 
+
+import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.security.MessageDigest;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -49,8 +70,6 @@ public class MyWalletActivity extends AppCompatActivity{
     private String msgs;
     // Creating JSON Parser object
     private final JSONParserString jsonParser = new JSONParserString();
-    private final JSONParserString jsonParserString = new JSONParserString();
-
     // url to get all products list
     private static final String url = URL.Payment;
 
@@ -60,57 +79,37 @@ public class MyWalletActivity extends AppCompatActivity{
     //user
     private static final String TAG_USERID = URL.USERID;
     private static final String TAG_USERNAME = URL.USERNAME;
-    private static final String TAG_EMAIL = URL.EMAIL;
     private static final String TAG_MOBILE = URL.MOBILE;
 
     //balance
     private static final String TAG_USERBALANCE = URL.BALANCE;
 
-    //instamojo
     private static final String TAG_INSTA_ORDERID = "instaorderid";
-    private static final String TAG_INSTA_TXNID = "instatxnid";
-    private static final String TAG_INSTA_PAYMENTID = "instapaymentid";
-    private static final String TAG_INSTA_TOKEN = "instatoken";
 
     private String balance;
-    private String email;
     private LinearLayout main;
     private String number;
     private TabLayout tabLayout;
     private String username;
     private ViewPager viewPager;
     private TextView walletBalance;
-
-
-   private int success;
-    //paytm
-
-    private String hash;
+    private PaymentParams mPaymentParams;
+    private int success;
+    PayuHashes payuHashes = new PayuHashes();
     private String msg;
 
-    //Paypal
-    final int REQUEST_CODE = 1;
-    final String get_token = URL.mainurl + "paypal/main.php";
-    final String send_payment_details = URL.mainurl + "paypal/checkout.php";
-    String token, paypalamount;
-    HashMap<String, String> paramHash;
-    public String stringNonce;
-
-
-    PayUmoneySdkInitializer.PaymentParam.Builder builder = new PayUmoneySdkInitializer.PaymentParam.Builder();
-    //declare paymentParam object
-    PayUmoneySdkInitializer.PaymentParam paymentParam = null;
 
     String TAG ="mainActivity", txnid ="txt12346", amount ="20", phone ="9144040888",
-            prodname ="BlueApp Course", firstname ="kamal",
-            merchantId = URL.MerchantId, merchantkey=URL.MerchantKey;  //   first test key only
-    public void PaytmAddMoney(String amt,String e,String o,String n) {
+            prodname ="BlueAppCourse", firstname ="kamal",email= "ppro8055@gmail.com",
+          merchantkey=URL.MerchantKey;
+    public void PaytmAddMoney(String amt,String username,String num) {
+        mPaymentParams = new PaymentParams();
         SharedPreferences shred = getSharedPreferences("userdetails", MODE_PRIVATE);
-        email= "ppro8055@gmail.com";
-        phone = o;
+
+        phone = num;
         amount = amt;
-        prodname = "Add Money To Wallet";
-        firstname = n ;
+        prodname = "AddMoney";
+        firstname = username ;
 
         final int min = 1000;
         final int max = 10000;
@@ -122,110 +121,151 @@ public class MyWalletActivity extends AppCompatActivity{
 
     public void startpay(){
 
-        builder.setAmount(amount)                          // Payment amount
-                .setTxnId(txnid)                     // Transaction ID
-                .setPhone(phone)                   // User Phone number
-                .setProductName(prodname)                   // Product Name or description
-                .setFirstName(username)                              // User First name
-                .setEmail(email)              // User Email ID
-                .setsUrl("https://www.payumoney.com/mobileapp/payumoney/success.php")     // Success URL (surl)
-                .setfUrl("https://www.payumoney.com/mobileapp/payumoney/failure.php")     //Failure URL (furl)
-                .setUdf1("")
-                .setUdf2("")
-                .setUdf3("")
-                .setUdf4("")
-                .setUdf5("")
-                .setUdf6("")
-                .setUdf7("")
-                .setUdf8("")
-                .setUdf9("")
-                .setUdf10("")
-                .setIsDebug(false)                              // Integration environment - true (Debug)/ false(Production)
-                .setKey(merchantkey)                        // Merchant key
-                .setMerchantId(merchantId);
-
-
+        mPaymentParams.setKey(merchantkey);
+        mPaymentParams.setAmount(amount);
+        mPaymentParams.setProductInfo(prodname);
+        mPaymentParams.setFirstName(firstname);
+        mPaymentParams.setEmail(email);
+        mPaymentParams.setPhone(phone);
+        mPaymentParams.setTxnId(txnid);
+        mPaymentParams.setSurl("https://www.payumoney.com/mobileapp/payumoney/success.php");    // Success URL (surl)
+        mPaymentParams.setFurl("https://www.payumoney.com/mobileapp/payumoney/failure.php");     //Failure URL (furl)
+        mPaymentParams.setUdf1("udf1");
+        mPaymentParams.setUdf2("udf2");
+        mPaymentParams.setUdf3("udf3");
+        mPaymentParams.setUdf4("udf4");
+        mPaymentParams.setUdf5("udf5");
         try {
-            paymentParam = builder.build();
-            // generateHashFromServer(paymentParam );
-            getHashkey();
+
+            new GetHash().execute();
 
         } catch (Exception e) {
             Log.e(TAG, " error s "+e.toString());
         }
 
     }
-    public void getHashkey(){
-        ServiceWrapper service = new ServiceWrapper(null);
-        Call<String> call = service.newHashCall(merchantkey, txnid, amount, prodname,
-                username, email);
 
-        call.enqueue(new Callback<String>() {
-            @Override
-            public void onResponse(Call<String> call, retrofit2.Response<String> response) {
-          //      Log.e(TAG, "hash res "+response.body());
-                String merchantHash= response.body();
-                if (merchantHash.isEmpty() || merchantHash.equals("")) {
-                    Toast.makeText(MyWalletActivity.this, "Could not generate hash", Toast.LENGTH_SHORT).show();
-                    Log.e(TAG, "hash empty");
+    class GetHash extends AsyncTask<Void, Void, String> {
+
+
+
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            pDialog = new ProgressDialog(MyWalletActivity.this);
+            pDialog.setMessage("Loading Please wait...");
+            pDialog.setIndeterminate(false);
+            pDialog.setCancelable(false);
+            pDialog.show();
+
+
+        }
+
+
+        @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+        @Override
+        protected String doInBackground(Void... voids) {
+            //creating request handler object
+            //creating request parameters
+            String rq = null;
+            JSONObject params = new JSONObject();
+            try {
+                params.put("txnid",txnid);
+                params.put("amount",amount);
+                params.put("productinfo",prodname);
+                params.put("firstname",firstname);
+                rq = jsonParser.makeHttpRequest(URL.Hash, params);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            //returing the response
+            return rq;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            pDialog.dismiss();
+            if (s == null || s.isEmpty()) {
+                Toast.makeText(MyWalletActivity.this, "Server Error", Toast.LENGTH_LONG).show();
+                return;
+            }
+            try {
+                JSONObject ack = new JSONObject(s);
+                String decData = Helper.profileDecrypt(ack.get("Data").toString(), ack.get("Hash").toString());
+                if (!Helper.verify(decData, ack.get("Sign").toString(), JSONParserString.publickey)) {
+                    Toast.makeText(MyWalletActivity.this, "Something Went Wrong", Toast.LENGTH_LONG).show();
+                    return;
                 } else {
-                    // mPaymentParams.setMerchantHash(merchantHash);
-                    hash = merchantHash;
-                    paymentParam.setMerchantHash(merchantHash);
-                    // Invoke the following function to open the checkout page.
-                    // PayUmoneyFlowManager.startPayUMoneyFlow(paymentParam, StartPaymentActivity.this,-1, true);
-                    PayUmoneyFlowManager.startPayUMoneyFlow(paymentParam, MyWalletActivity.this, R.style.AppTheme_default, false);
+
+                    JSONObject obj = new JSONObject(decData);
+//                    Log.d("Hash",obj.toString());
+//                    Log.d("Hash" , calculateHash("xVadIpa2|txt12346|20|BlueAppCourse|kamal|ppro8055@gmail.com|udf1|udf2|udf3|udf4|udf5||||||yDxvb85n3p"));
+//                    Log.d("Hash",obj.getString(PayuConstants.PAYMENT_PARAMS));
+                    if(!obj.getString(PayuConstants.PAYMENT_PARAMS).isEmpty()) {
+                        payuHashes.setPaymentHash(obj.getString(PayuConstants.PAYMENT_PARAMS));
+                    }
+                    if(!obj.getString(PayuConstants.PAYMENT_RELATED_DETAILS_FOR_MOBILE_SDK).isEmpty()) {
+                        payuHashes.setPaymentRelatedDetailsForMobileSdkHash(obj.getString(PayuConstants.PAYMENT_RELATED_DETAILS_FOR_MOBILE_SDK));
+                   }
+                    if(!obj.getString(PayuConstants.VAS_FOR_MOBILE_SDK).isEmpty()) {
+                        payuHashes.setVasForMobileSdkHash(obj.getString(PayuConstants.VAS_FOR_MOBILE_SDK));
+                    }
+                    launchSdkUI(payuHashes);
                 }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            } catch (Exception e) {
+                e.printStackTrace();
             }
 
-            @Override
-            public void onFailure(Call<String> call, Throwable t) {
-                Log.e(TAG, "hash error "+ t.toString());
-            }
-        });
-
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-// PayUMoneySdk: Success -- payuResponse{"id":225642,"mode":"CC","status":"success","unmappedstatus":"captured","key":"9yrcMzso","txnid":"223013","transaction_fee":"20.00","amount":"20.00","cardCategory":"domestic","discount":"0.00","addedon":"2018-12-31 09:09:43","productinfo":"a2z shop","firstname":"kamal","email":"kamal.bunkar07@gmail.com","phone":"9144040888","hash":"b22172fcc0ab6dbc0a52925ebbd0297cca6793328a8dd1e61ef510b9545d9c851600fdbdc985960f803412c49e4faa56968b3e70c67fe62eaed7cecacdfdb5b3","field1":"562178","field2":"823386","field3":"2061","field4":"MC","field5":"167227964249","field6":"00","field7":"0","field8":"3DS","field9":" Verification of Secure Hash Failed: E700 -- Approved -- Transaction Successful -- Unable to be determined--E000","payment_source":"payu","PG_TYPE":"AXISPG","bank_ref_no":"562178","ibibo_code":"VISA","error_code":"E000","Error_Message":"No Error","name_on_card":"payu","card_no":"401200XXXXXX1112","is_seamless":1,"surl":"https://www.payumoney.com/sandbox/payment/postBackParam.do","furl":"https://www.payumoney.com/sandbox/payment/postBackParam.do"}
-//PayUMoneySdk: Success -- merchantResponse438104
-// on successfull txn
-        //  request code 10000 resultcode -1
-        //tran {"status":0,"message":"payment status for :438104","result":{"postBackParamId":292490,"mihpayid":"225642","paymentId":438104,"mode":"CC","status":"success","unmappedstatus":"captured","key":"9yrcMzso","txnid":"txt12345","amount":"20.00","additionalCharges":"","addedon":"2018-12-31 09:09:43","createdOn":1546227592000,"productinfo":"a2z shop","firstname":"kamal","lastname":"","address1":"","address2":"","city":"","state":"","country":"","zipcode":"","email":"kamal.bunkar07@gmail.com","phone":"9144040888","udf1":"","udf2":"","udf3":"","udf4":"","udf5":"","udf6":"","udf7":"","udf8":"","udf9":"","udf10":"","hash":"0e285d3a1166a1c51b72670ecfc8569645b133611988ad0b9c03df4bf73e6adcca799a3844cd279e934fed7325abc6c7b45b9c57bb15047eb9607fff41b5960e","field1":"562178","field2":"823386","field3":"2061","field4":"MC","field5":"167227964249","field6":"00","field7":"0","field8":"3DS","field9":" Verification of Secure Hash Failed: E700 -- Approved -- Transaction Successful -- Unable to be determined--E000","bank_ref_num":"562178","bankcode":"VISA","error":"E000","error_Message":"No Error","cardToken":"","offer_key":"","offer_type":"","offer_availed":"","pg_ref_no":"","offer_failure_reason":"","name_on_card":"payu","cardnum":"401200XXXXXX1112","cardhash":"This field is no longer supported in postback params.","card_type":"","card_merchant_param":null,"version":"","postUrl":"https:\/\/www.payumoney.com\/mobileapp\/payumoney\/success.php","calledStatus":false,"additional_param":"","amount_split":"{\"PAYU\":\"20.0\"}","discount":"0.00","net_amount_debit":"20","fetchAPI":null,"paisa_mecode":"","meCode":"{\"vpc_Merchant\":\"TESTIBIBOWEB\"}","payuMoneyId":"438104","encryptedPaymentId":null,"id":null,"surl":null,"furl":null,"baseUrl":null,"retryCount":0,"merchantid":null,"payment_source":null,"pg_TYPE":"AXISPG"},"errorCode":null,"responseCode":null}---438104
-
-        // Result Code is -1 send from Payumoney activity
- //       Log.e("StartPaymentActivity", "request code " + requestCode + " resultcode " + resultCode);
-        if (requestCode == PayUmoneyFlowManager.REQUEST_CODE_PAYMENT && resultCode == RESULT_OK && data != null) {
-            TransactionResponse transactionResponse = data.getParcelableExtra( PayUmoneyFlowManager.INTENT_EXTRA_TRANSACTION_RESPONSE );
-
-            if (transactionResponse != null && transactionResponse.getPayuResponse() != null) {
-
-                if(transactionResponse.getTransactionStatus().equals( TransactionResponse.TransactionStatus.SUCCESSFUL )){
-
-                    //Success Transaction
-                    Toast.makeText(MyWalletActivity.this,"Transaction Successful",Toast.LENGTH_LONG).show();
-                    new OneLoadAllProducts().execute();
-                } else{
-                    //Failure Transaction
-                    Toast.makeText(MyWalletActivity.this,"Transaction failed",Toast.LENGTH_LONG).show();
-
-                }
-
-                // Response from Payumoney
-                String payuResponse = transactionResponse.getPayuResponse();
-
-                // Response from SURl and FURL
-                String merchantResponse = transactionResponse.getTransactionDetails();
-                Log.e(TAG, "tran "+payuResponse+"---"+ merchantResponse);
-            } /* else if (resultModel != null && resultModel.getError() != null) {
-                Log.d(TAG, "Error response : " + resultModel.getError().getTransactionResponse());
-            } else {
-                Log.d(TAG, "Both objects are null!");
-            }*/
         }
     }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, final Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        Log.d("MainActivity", "request code " + requestCode + " resultcode " + resultCode);
+            if (data != null && resultCode == RESULT_OK && requestCode == PayuConstants.PAYU_REQUEST_CODE) {
+                try {
+                    JSONObject jsonObject = new JSONObject(data.getStringExtra(PayuConstants.PAYU_RESPONSE));
+                    if(jsonObject.getString(PayuConstants.STATUS).equals(PayuConstants.SUCCESS.toLowerCase())){
+                        new OneLoadAllProducts().execute();
+                        Toast.makeText(MyWalletActivity.this,PayuConstants.SUCCESS, Toast.LENGTH_SHORT).show();
+                    }else{
+                        Toast.makeText(MyWalletActivity.this,"Transaction Fa", Toast.LENGTH_SHORT).show();
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            } else {
+                Toast.makeText(this, getString(R.string.could_not_receive_data), Toast.LENGTH_LONG).show();
+            }
+    }
+
+    public void launchSdkUI(PayuHashes payuHashes) {
+        Intent intent = new Intent(this, PayUBaseActivity.class);
+        intent.putExtra(PayuConstants.PAYMENT_PARAMS, mPaymentParams);
+        intent.putExtra(PayuConstants.PAYU_HASHES, payuHashes);
+         intent.putExtra(PayuConstants.ENV,PayuConstants.STAGING_ENV);
+        startActivityForResult(intent, PayuConstants.PAYU_REQUEST_CODE);
+    }
+    private String calculateHash(String hashString) {
+        try {
+            StringBuilder hash = new StringBuilder();
+            MessageDigest messageDigest = MessageDigest.getInstance("SHA-512");
+            messageDigest.update(hashString.getBytes());
+            byte[] mdbytes = messageDigest.digest();
+            for (byte hashByte : mdbytes) {
+                hash.append(Integer.toString((hashByte & 0xff) + 0x100, 16).substring(1));
+            }
+            return hash.toString();
+        } catch (Exception e) {
+            return "ERROR";
+        }
+    }
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -235,14 +275,13 @@ public class MyWalletActivity extends AppCompatActivity{
         TextView playcoin = findViewById(R.id.playcoin);
         String playbal = String.valueOf(shred.getInt("balance",0));
         playcoin.setText(playbal);
-        // Call the function callInstamojo to start payment here
+
 
 
         walletBalance = (TextView) findViewById(R.id.walletBalance);
         main = (LinearLayout) findViewById(R.id.mainLayout);
         balance = String.valueOf(shred.getInt(TAG_USERBALANCE,0));
         username = shred.getString(TAG_USERNAME,"");
-        email = shred.getString(TAG_EMAIL,"");
         number = shred.getString(TAG_MOBILE,"");
         walletBalance.setText(""+balance);
 
@@ -363,7 +402,7 @@ public class MyWalletActivity extends AppCompatActivity{
                             Toast.makeText(MyWalletActivity.this, "Something Went Wrong", Toast.LENGTH_LONG).show();
                             return;
                         } else {
-                             Log.d("test", String.valueOf(ack));
+                            Log.d("test", String.valueOf(ack));
                             JSONObject json = new JSONObject(decData);
                             // Checking for SUCCESS TAG
                             success = json.getInt(TAG_SUCCESS);
@@ -403,7 +442,7 @@ public class MyWalletActivity extends AppCompatActivity{
     }
 }
 
-    //PayPal
+//PayPal
 //
 //    class OneLoadAllProductsPayPal extends AsyncTask<String, String, String> {
 //        SharedPreferences shred = getSharedPreferences("userdetails", MODE_PRIVATE);
@@ -497,7 +536,7 @@ public class MyWalletActivity extends AppCompatActivity{
 //
 //    }
 
-    //Paypal
+//Paypal
 
 //    public void onBraintreeSubmit(String email, String phone, String amount, String purpose, String buyername) {
 //

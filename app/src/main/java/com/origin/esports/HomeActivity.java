@@ -77,7 +77,7 @@ public class HomeActivity extends AppCompatActivity {
 //        navigation.setLabelVisibilityMode(LabelVisibilityMode.LABEL_VISIBILITY_LABELED);
         ImageButton walletbal = findViewById(R.id.walletshotcut);
         TextView bal = findViewById(R.id.playcoin);
-       String balance = String.valueOf(shred.getInt("balance",0));
+        String balance = String.valueOf(shred.getInt("balance",0));
         bal.setText(balance);
         ImageButton notifymw = findViewById(R.id.notify);
 
@@ -86,19 +86,6 @@ public class HomeActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(getApplicationContext(), NewsActivity.class));
-            }
-        });
-        walletbal.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(),MyWalletActivity.class));
-            }
-        });
-
-        bal.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(),MyWalletActivity.class));
             }
         });
     }
@@ -247,12 +234,13 @@ public class HomeActivity extends AppCompatActivity {
                             } else {
                                 //converting response to json object
                                 JSONObject obj = new JSONObject(decData);
-                            //    Log.d("test",obj.toString());
+                               Log.d("test",obj.toString());
                                 if (!obj.getBoolean(TAG_ERROR))
                                 {
                                     shred.edit().putInt("reward",obj.getInt("reward")).apply();
                                     newversion = obj.getString(TAG_APP_NEWVERSION);
                                     whatsNewData = obj.getString(data);
+                                   shred.edit().putBoolean("wallet",obj.getBoolean("wallet")).apply();
                                     PackageInfo pInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
                                     String version = pInfo.versionName;
                                     //           System.out.println("takedown" + "old:" + version + " new:" + newversion);
