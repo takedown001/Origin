@@ -10,3 +10,5 @@ Watch Ads & Earn Free Coins In Order To Play Games
 Imporved Stability & Security Of App.
 Refer & Earn System Added
 PayumoneyPaymentGateway
+
+You Can Get This Application On PlayStore : https://play.google.com/store/apps/details?id=com.origin.esports
